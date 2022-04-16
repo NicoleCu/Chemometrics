@@ -1,6 +1,8 @@
 library(readxl)
 library(mdatools)
 library(Metrics)
+library(e1071)
+library(randomForest)
 
 x <- data.frame(read_excel("~/R/Chemometrics/ModelWaters-Daphnia.xlsx",
                               range ='B2:L23'))
@@ -8,6 +10,7 @@ rownames(x) <- seq(0,20, 1)
 y <- data.frame(read_excel("~/R/Chemometrics/ModelWaters-Daphnia.xlsx",
                           range ='N2:N23'))
 rownames(y) <- seq(0,20, 1)
+colnames(x) <- seq(1,11, 1)
 
 set.seed(41)
 s <- sample(1:21, 6)
@@ -21,7 +24,7 @@ xy_train <- cbind(x_train, y_train)
 ###############################################################################
 ###############################################################################
 # PLS for original data
-m_daf <- pls(x, y[,1], 10, cv = 1)
+m_daf <- pls(x, y, 10, cv = 1)
 plot(m_daf)
 show(summary(m_daf))
 plotYVariance(m_daf, type  = 'h', show.labels = TRUE)
@@ -29,6 +32,7 @@ plotYVariance(m_daf, type  = 'h', show.labels = TRUE)
 # look for the outliers
 plotPredictions(m_daf, show.labels = T)
 abline(a = 0, b = 1)
+plotRegcoeffs(m_daf, show.labels = T)
 
 ################################################################################
 ### SVM
@@ -134,24 +138,35 @@ grid()
 ###############################################################################
 ##PLS after removing outliers
 
-x_n <- x[!(rownames(x) %in% c(11,19, 9, 18)), ]
-y_n <- y[!(rownames(y) %in% c(11,19, 9, 18)), ]
+x_n <- x[!(rownames(x) %in% c('11','19', '9', '18')), ]
+y_n <- y[!(rownames(y) %in% c("11","19", "9", '18')), ]
 
-set.seed(41)
-c <- sample(1:17, 4)
-x_ntest <-  x[c,]
-y_ntest <- y[c,]
-names(y_ntest) <- c
-x_ntrain = x[-c,]
-y_ntrain <- y[-c,]
-xy_ntrain <- cbind(x_ntrain, y_ntrain)
+#set.seed(41)
+#c <- sample(1:17, 4)
+#x_ntest <-  x[c,]
+#y_ntest <- y[c,]
+#names(y_ntest) <- c
+#x_ntrain = x[-c,]
+#y_ntrain <- y[-c,]
+#xy_ntrain <- cbind(x_ntrain, y_ntrain)
 
-m_daf_n <- pls(x_n, y_n, 10, cv = 1, scale = F)
+m_daf_n <- pls(x_n, y_n, 10, cv = 1)
 plot(m_daf_n)
 show(summary(m_daf_n))
 plotYVariance(m_daf_n, type  = 'h', show.labels = TRUE)
 plotPredictions(m_daf_n, show.labels = T)
 abline(a = 0, b = 1)
+plotRegcoeffs(m_daf_n, show.labels = T)
+
+#rem <- c(3, 10,11, 8, 6)
+m_daf_n <- pls(x_n[,c(2,5,7)], y_n, 10, cv = 1)
+plot(m_daf_n)
+show(summary(m_daf_n))
+plotYVariance(m_daf_n, type  = 'h', show.labels = TRUE)
+plotPredictions(m_daf_n, show.labels = T)
+abline(a = 0, b = 1)
+plotRegcoeffs(m_daf_n, show.labels = T)
+
 
 ################################################################################
 ### SVM after removing outliers

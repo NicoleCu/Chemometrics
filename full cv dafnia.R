@@ -52,4 +52,9 @@ for (i in 1:nrow(DafniaMagna)) {
 av_PLS_error_fullcv <- sum(vec_PLS_full)/length(vec_PLS_full)
 av_SVM_error_fullcv <- sum(vec_SVM_full)/length(vec_SVM_full)
 av_RF_error_fullcv <- sum(vec_RF_full)/length(vec_RF_full)
-av_KRLS_error_fullcv <- sum(vec_RMSEP_KRLS_full)/length(RMSEP_KRLS_full)
+av_KRLS_error_fullcv <- sum(vec_KRLS_full)/length(vec_KRLS_full)
+names(vec_KRLS_full) <- rownames(DafniaMagna)
+names(vec_PLS_full) <- rownames(DafniaMagna)
+names(vec_SVM_full) <- rownames(DafniaMagna)
+names(vec_RF_full) <- rownames(DafniaMagna)
+

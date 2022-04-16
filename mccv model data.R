@@ -3,7 +3,7 @@ library(mdatools)
 library(Metrics)
 library(e1071)
 library(KRLS)
-
+library(randomForest)
 
 DafniaMagna <- data.frame(read_excel("~/R/Chemometrics/ModelWaters-Daphnia.xlsx",
                                      range ='B2:N23')) 
@@ -11,7 +11,7 @@ rownames(DafniaMagna) <- seq(0,20, 1)
 DafniaMagna <- DafniaMagna[,-12]
 
 # remove outliers 
-DafniaMagna <-  DafniaMagna[!(row.names(DafniaMagna) %in% c(11,19, 9, 18)),]
+#DafniaMagna <-  DafniaMagna[!(row.names(DafniaMagna) %in% c(11,19, 9, 18,0)),]
 prop <- round(nrow(DafniaMagna)*0.70) 
 vec_PLS <- vector()
 vec_RF <- vector()

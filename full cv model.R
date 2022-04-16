@@ -12,7 +12,7 @@ rownames(DafniaMagna) <- seq(0,20, 1)
 DafniaMagna <- DafniaMagna[,-12]
 
 # remove outliers 
-#DafniaMagna <-  DafniaMagna[!(row.names(DafniaMagna) %in% c(11,0)),]
+DafniaMagna <-  DafniaMagna[!(row.names(DafniaMagna) %in% c(11, 19, 18, 9, 0)),]
 prop <- round(nrow(DafniaMagna)*0.70) 
 vec_PLS_full <- vector()
 vec_RF_full <- vector()
